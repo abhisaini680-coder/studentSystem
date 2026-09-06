@@ -26,6 +26,7 @@ export class Students implements OnInit {
   private apiUrl = 'http://localhost:5246/api/Students';
 
   students: Student[] = [];
+  
 
   student: Student = {
     id: 0,
