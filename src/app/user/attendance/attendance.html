@@ -1,0 +1,229 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .attendance-container {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: calc(100vh - 69px);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .page-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 28px;
+  }
+
+  .total {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #374151;
+  }
+
+  .total strong {
+    color: #2563eb;
+    font-size: 18px;
+  }
+
+  .table-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .table-title {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-title h3 {
+    margin: 0;
+    color: #1f2937;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #1f3a5f;
+  }
+
+  th {
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .id {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  .present {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #dcfce7;
+    color: #15803d;
+    font-weight: 700;
+  }
+
+  .absent {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-weight: 700;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 35px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 600px) {
+    .attendance-container {
+      padding: 15px;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+</style>
+
+<div class="attendance-container">
+
+  <div class="page-header">
+
+    <h2>
+      My Attendance
+    </h2>
+
+    <div class="total">
+
+      Total Attendance:
+      <strong>
+        {{ attendanceList.length }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <div class="table-card">
+
+    <div class="table-title">
+      <h3>Attendance List</h3>
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr *ngFor="let item of attendanceList">
+
+            <td class="id">
+              {{ item.id }}
+            </td>
+
+            <td>
+              {{ item.studentId }}
+            </td>
+
+            <td>
+              {{ item.studentName }}
+            </td>
+
+            <td>
+              {{ item.date | date:'dd-MM-yyyy' }}
+            </td>
+
+            <td>
+
+              <span
+                [class.present]="item.status === 'Present'"
+                [class.absent]="item.status === 'Absent'">
+
+                {{ item.status }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+
+          <tr *ngIf="attendanceList.length === 0">
+
+            <td
+              colspan="5"
+              class="empty">
+
+              No attendance records found.
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

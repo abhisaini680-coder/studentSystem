@@ -1,0 +1,538 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  :host {
+    display: block;
+  }
+
+  .dashboard-container {
+    width: 100%;
+    min-height: calc(100vh - 69px);
+
+    background: #f5f7fb;
+
+    /* Space around dashboard */
+    padding: 35px 40px 40px 45px;
+
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* ==========================================
+     HEADER
+     ========================================== */
+
+  .dashboard-header {
+    margin-bottom: 30px;
+  }
+
+  .dashboard-header h1 {
+    margin: 0 0 8px;
+
+    color: #17365d;
+
+    font-size: 34px;
+    font-weight: 700;
+  }
+
+  .dashboard-header p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 17px;
+  }
+
+  /* ==========================================
+     STAT CARDS
+     ========================================== */
+
+  .stats-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 24px;
+
+    width: 100%;
+
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    min-height: 125px;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.08);
+
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 7px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .stat-icon {
+    width: 64px;
+    height: 64px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background: #e7eef8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+  }
+
+  .stat-content {
+    min-width: 0;
+  }
+
+  .stat-content h3 {
+    margin: 0 0 7px;
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    font-weight: 600;
+  }
+
+  .stat-number {
+    margin: 0;
+
+    color: #17365d;
+
+    font-size: 28px;
+
+    font-weight: 700;
+  }
+
+  /* ==========================================
+     QUICK ACTIONS
+     ========================================== */
+
+  .quick-actions-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 28px 30px;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .quick-actions-card h2 {
+    margin: 0 0 22px;
+
+    color: #17365d;
+
+    font-size: 25px;
+  }
+
+  .quick-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 16px;
+  }
+
+  .quick-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-width: 165px;
+
+    padding: 14px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #367ff0;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .quick-btn:hover {
+    background: #2563d8;
+
+    transform: translateY(-2px);
+  }
+
+  /* ==========================================
+     WELCOME BOX
+     ========================================== */
+
+  .welcome-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 30px;
+
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .welcome-card h2 {
+    margin: 0 0 20px;
+
+    color: #17365d;
+
+    font-size: 25px;
+  }
+
+  .welcome-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+  }
+
+  /* ==========================================
+     LOADING
+     ========================================== */
+
+  .loading {
+    color: #64748b;
+
+    font-size: 26px;
+
+    font-weight: 700;
+  }
+
+  /* ==========================================
+     RESPONSIVE
+     ========================================== */
+
+  @media (max-width: 1200px) {
+
+    .stats-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 750px) {
+
+    .dashboard-container {
+      padding:
+        25px
+        25px
+        35px
+        30px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 29px;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+      flex-direction: column;
+    }
+
+    .quick-btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    .dashboard-container {
+      padding: 20px;
+    }
+
+    .stat-card {
+      padding: 20px;
+    }
+
+    .quick-actions-card,
+    .welcome-card {
+      padding: 22px;
+    }
+  }
+</style>
+
+
+<div class="dashboard-container">
+
+  <!-- ==========================================
+       DASHBOARD HEADER
+       ========================================== -->
+
+  <div class="dashboard-header">
+
+    <h1>
+      Student Dashboard
+    </h1>
+
+    <p>
+      Welcome back, {{ user?.name || 'Student' }}
+    </p>
+
+  </div>
+
+
+  <!-- ==========================================
+       STATISTICS
+       ========================================== -->
+
+  <div class="stats-grid">
+
+    <!-- COURSES -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        📚
+      </div>
+
+      <div class="stat-content">
+
+        <h3>
+          My Courses
+        </h3>
+
+        <div class="stat-number">
+
+          {{ totalCourses }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        🗓️
+      </div>
+
+      <div class="stat-content">
+
+        <h3>
+          Attendance
+        </h3>
+
+        <div class="stat-number">
+
+          {{ totalAttendance }}%
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        📝
+      </div>
+
+      <div class="stat-content">
+
+        <h3>
+          Results
+        </h3>
+
+        <div class="stat-number">
+
+          {{ totalResults }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- NOTICES -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        📢
+      </div>
+
+      <div class="stat-content">
+
+        <h3>
+          Notices
+        </h3>
+
+        <div class="stat-number">
+
+          {{ totalNotices }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       QUICK ACTIONS
+       ========================================== -->
+
+  <div class="quick-actions-card">
+
+    <h2>
+      Quick Actions
+    </h2>
+
+
+    <div class="quick-actions">
+
+      <!-- PROFILE -->
+
+      <a
+        routerLink="/user/profile"
+        class="quick-btn">
+
+        👤
+        View Profile
+
+      </a>
+
+
+      <!-- COURSES -->
+
+      <a
+        routerLink="/user/courses"
+        class="quick-btn">
+
+        📚
+        My Courses
+
+      </a>
+
+
+      <!-- ATTENDANCE -->
+
+      <a
+        routerLink="/user/attendance"
+        class="quick-btn">
+
+        🗓️
+        Check Attendance
+
+      </a>
+
+
+      <!-- RESULTS -->
+
+      <a
+        routerLink="/user/results"
+        class="quick-btn">
+
+        📝
+        View Results
+
+      </a>
+
+
+      <!-- NOTICES -->
+
+      <a
+        routerLink="/user/notices"
+        class="quick-btn">
+
+        📢
+        View Notices
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       WELCOME INFORMATION
+       ========================================== -->
+
+  <div class="welcome-card">
+
+    <h2>
+      Welcome to Student Management System
+    </h2>
+
+    <p>
+      From this dashboard you can view your profile,
+      courses, attendance, results and important notices.
+      Use the Student Panel taskbar on the left to navigate
+      through the system.
+    </p>
+
+  </div>
+
+</div>

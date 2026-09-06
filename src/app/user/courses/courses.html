@@ -1,0 +1,198 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .courses-container {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: calc(100vh - 69px);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .page-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 28px;
+  }
+
+  .total {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #374151;
+  }
+
+  .total strong {
+    color: #2563eb;
+    font-size: 18px;
+  }
+
+  .table-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .table-title {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-title h3 {
+    margin: 0;
+    color: #1f2937;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #1f3a5f;
+  }
+
+  th {
+    padding: 15px;
+    color: white;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .id {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 35px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 600px) {
+    .courses-container {
+      padding: 15px;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+</style>
+
+<div class="courses-container">
+
+  <div class="page-header">
+
+    <h2>
+      My Courses
+    </h2>
+
+    <div class="total">
+      Total Courses:
+      <strong>
+        {{ courses.length }}
+      </strong>
+    </div>
+
+  </div>
+
+
+  <div class="table-card">
+
+    <div class="table-title">
+      <h3>Course List</h3>
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Code</th>
+            <th>Duration</th>
+            <th>Description</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let course of courses">
+
+            <td class="id">
+              {{ course.id }}
+            </td>
+
+            <td>
+              {{ course.name }}
+            </td>
+
+            <td>
+              {{ course.code }}
+            </td>
+
+            <td>
+              {{ course.duration }}
+            </td>
+
+            <td>
+              {{ course.description }}
+            </td>
+
+          </tr>
+
+          <tr *ngIf="courses.length === 0">
+
+            <td
+              colspan="5"
+              class="empty">
+
+              No courses found.
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,178 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .notices-container {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: calc(100vh - 69px);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .page-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 28px;
+  }
+
+  .total {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #374151;
+  }
+
+  .total strong {
+    color: #2563eb;
+    font-size: 18px;
+  }
+
+  .notice-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .notice-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .notice-card h3 {
+    margin: 0 0 12px;
+    color: #1f2937;
+    font-size: 20px;
+  }
+
+  .description {
+    margin: 0 0 18px;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+
+  .notice-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 13px;
+  }
+
+  .category {
+    color: #2563eb;
+    font-weight: 600;
+  }
+
+  .empty {
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (max-width: 800px) {
+    .notice-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .notices-container {
+      padding: 15px;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+</style>
+
+<div class="notices-container">
+
+  <div class="page-header">
+
+    <h2>
+      Notices
+    </h2>
+
+    <div class="total">
+
+      Total Notices:
+      <strong>
+        {{ notices.length }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="notice-list"
+    *ngIf="notices.length > 0">
+
+    <div
+      class="notice-card"
+      *ngFor="let notice of notices">
+
+      <h3>
+        {{ notice.title }}
+      </h3>
+
+      <p class="description">
+        {{ notice.description }}
+      </p>
+
+      <div class="notice-info">
+
+        <span>
+          Date:
+          {{
+            notice.date
+              ? (notice.date | date:'dd-MM-yyyy')
+              : 'Not specified'
+          }}
+        </span>
+
+        <span>
+          Category:
+
+          <span class="category">
+            {{ notice.category || 'General' }}
+          </span>
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="empty"
+    *ngIf="notices.length === 0">
+
+    No notices available.
+
+  </div>
+
+</div>

@@ -1,0 +1,444 @@
+<div class="login-page">
+
+  <div class="login-box">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="icon">🎓</div>
+
+      <h1>Student Management System</h1>
+
+      <p>Login to continue</p>
+    </div>
+
+
+    <!-- LOGIN FORM -->
+    <form (ngSubmit)="login()">
+
+      <!-- EMAIL -->
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+          required
+        >
+
+      </div>
+
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+          required
+        >
+
+      </div>
+
+
+      <!-- ERROR MESSAGE -->
+      <div
+        class="error-message"
+        *ngIf="message">
+
+        {{ message }}
+
+      </div>
+
+
+      <!-- LOGIN BUTTON -->
+      <button
+        type="submit"
+        class="login-btn">
+
+        Login
+
+      </button>
+
+    </form>
+
+
+    <!-- REGISTER -->
+    <div class="register-link">
+
+      Don't have an account?
+
+      <a routerLink="/register">
+        Create New Account
+      </a>
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+<!-- ================= CSS ================= -->
+
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ================= PAGE ================= */
+
+.login-page {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #eff6ff,
+      #f8fafc
+    );
+
+}
+
+
+/* ================= LOGIN BOX ================= */
+
+.login-box {
+
+  width: 430px;
+
+  background: white;
+
+  padding: 40px;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 50px
+    rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* ================= HEADER ================= */
+
+.header {
+
+  text-align: center;
+
+  margin-bottom: 30px;
+
+}
+
+.icon {
+
+  width: 70px;
+
+  height: 70px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  background: #dbeafe;
+
+  font-size: 34px;
+
+}
+
+.header h1 {
+
+  color: #1e293b;
+
+  font-size: 24px;
+
+  margin-bottom: 8px;
+
+}
+
+.header p {
+
+  color: #64748b;
+
+  font-size: 14px;
+
+}
+
+
+/* ================= FORM ================= */
+
+.form-group {
+
+  margin-bottom: 20px;
+
+}
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-weight: bold;
+
+  font-size: 14px;
+
+}
+
+.form-group input {
+
+  width: 100%;
+
+  padding: 13px 15px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 15px;
+
+  transition: 0.3s;
+
+}
+
+.form-group input:focus {
+
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(59, 130, 246, 0.12);
+
+}
+
+
+/* ================= ERROR ================= */
+
+.error-message {
+
+  padding: 11px;
+
+  margin-bottom: 18px;
+
+  border-radius: 7px;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+  text-align: center;
+
+  font-size: 14px;
+
+}
+
+
+/* ================= LOGIN BUTTON ================= */
+
+.login-btn {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #3b82f6;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+.login-btn:hover {
+
+  background: #2563eb;
+
+  transform: translateY(-1px);
+
+}
+
+
+/* ================= REGISTER ================= */
+
+.register-link {
+
+  text-align: center;
+
+  margin-top: 22px;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+}
+
+.register-link a {
+
+  color: #2563eb;
+
+  font-weight: bold;
+
+  text-decoration: none;
+
+  margin-left: 4px;
+
+}
+
+.register-link a:hover {
+
+  text-decoration: underline;
+
+}
+
+
+/* ================= TEST ACCOUNTS ================= */
+
+.test-accounts {
+
+  margin-top: 30px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #e2e8f0;
+
+}
+
+.test-accounts h3 {
+
+  text-align: center;
+
+  color: #475569;
+
+  font-size: 14px;
+
+  margin-bottom: 15px;
+
+}
+
+.account {
+
+  padding: 13px;
+
+  border-radius: 8px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+}
+
+.account strong {
+
+  font-size: 14px;
+
+}
+
+.account span {
+
+  font-size: 13px;
+
+}
+
+.account small {
+
+  font-size: 12px;
+
+}
+
+.admin-account {
+
+  background: #eff6ff;
+
+  color: #1d4ed8;
+
+}
+
+.customer-account {
+
+  background: #f0fdf4;
+
+  color: #15803d;
+
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 500px) {
+
+  .login-page {
+
+    padding: 15px;
+
+  }
+
+  .login-box {
+
+    width: 100%;
+
+    padding: 30px 22px;
+
+  }
+
+  .header h1 {
+
+    font-size: 21px;
+
+  }
+
+}
+
+</style>

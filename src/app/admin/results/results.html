@@ -1,0 +1,426 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .results-container {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .page-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 28px;
+  }
+
+  .total-results {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+
+  .total-results strong {
+    color: #2563eb;
+    font-size: 18px;
+  }
+
+  .form-card,
+  .table-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  }
+
+  .form-card {
+    padding: 25px;
+    margin-bottom: 25px;
+  }
+
+  .form-card h3,
+  .table-title h3 {
+    margin: 0 0 20px;
+    color: #1f2937;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  .form-group input {
+    padding: 11px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .form-group input:focus {
+    border-color: #2563eb;
+  }
+
+  .form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .btn {
+    border: none;
+    padding: 11px 20px;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .save-btn {
+    background: #2563eb;
+    color: white;
+  }
+
+  .cancel-btn {
+    background: #6b7280;
+    color: white;
+  }
+
+  .table-card {
+    overflow: hidden;
+  }
+
+  .table-title {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-title h3 {
+    margin: 0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 950px;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #1f3a5f;
+  }
+
+  thead th {
+    color: white;
+    padding: 15px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .id-cell {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  .grade {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 700;
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    border: none;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    background: #f59e0b;
+  }
+
+  .delete-btn {
+    background: #dc2626;
+  }
+
+  .empty-row {
+    text-align: center;
+    padding: 35px !important;
+    color: #6b7280 !important;
+  }
+
+  @media (max-width: 900px) {
+    .form-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .results-container {
+      padding: 15px;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+
+<div class="results-container">
+
+  <div class="page-header">
+    <h2>Student Results</h2>
+
+    <div class="total-results">
+      Total Results:
+      <strong>{{ results.length }}</strong>
+    </div>
+  </div>
+
+
+  <div class="form-card">
+
+    <h3>
+      {{ editing ? 'Edit Result' : 'Add New Result' }}
+    </h3>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Student ID</label>
+
+        <input
+          type="number"
+          [(ngModel)]="result.studentId"
+          placeholder="Enter student ID">
+      </div>
+
+
+      <div class="form-group">
+        <label>Student Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="result.studentName"
+          placeholder="Enter student name">
+      </div>
+
+
+      <div class="form-group">
+        <label>Course</label>
+
+        <input
+          type="text"
+          [(ngModel)]="result.course"
+          placeholder="Enter course">
+      </div>
+
+
+      <div class="form-group">
+        <label>Subject</label>
+
+        <input
+          type="text"
+          [(ngModel)]="result.subject"
+          placeholder="Enter subject">
+      </div>
+
+
+      <div class="form-group">
+        <label>Marks</label>
+
+        <input
+          type="number"
+          [(ngModel)]="result.marks"
+          placeholder="Enter marks"
+          min="0"
+          max="100">
+      </div>
+
+
+      <div class="form-group">
+        <label>Grade</label>
+
+        <input
+          type="text"
+          [(ngModel)]="result.grade"
+          placeholder="Enter grade">
+      </div>
+
+    </div>
+
+
+    <div class="form-buttons">
+
+      <button
+        type="button"
+        class="btn save-btn"
+        (click)="saveResult()">
+
+        {{ editing ? 'Update Result' : 'Add Result' }}
+
+      </button>
+
+
+      <button
+        type="button"
+        class="btn cancel-btn"
+        *ngIf="editing"
+        (click)="clearForm()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="table-card">
+
+    <div class="table-title">
+      <h3>Result List</h3>
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Course</th>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Grade</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of results">
+
+            <td class="id-cell">
+              {{ item.id }}
+            </td>
+
+            <td>
+              {{ item.studentId }}
+            </td>
+
+            <td>
+              {{ item.studentName }}
+            </td>
+
+            <td>
+              {{ item.course }}
+            </td>
+
+            <td>
+              {{ item.subject }}
+            </td>
+
+            <td>
+              {{ item.marks }}
+            </td>
+
+            <td>
+              <span class="grade">
+                {{ item.grade }}
+              </span>
+            </td>
+
+            <td>
+              <div class="actions">
+
+                <button
+                  class="edit-btn"
+                  (click)="editResult(item)">
+                  Edit
+                </button>
+
+                <button
+                  class="delete-btn"
+                  (click)="deleteResult(item.id)">
+                  Delete
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+
+
+          <tr *ngIf="results.length === 0">
+
+            <td colspan="8" class="empty-row">
+              No results found.
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

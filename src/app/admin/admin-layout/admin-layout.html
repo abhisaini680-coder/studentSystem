@@ -1,0 +1,331 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  :host {
+    display: block;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .admin-layout {
+    min-height: 100vh;
+    background: #f5f7fb;
+  }
+
+  /* =========================
+     SIDEBAR
+     ========================= */
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 300px;
+    height: 100vh;
+
+    background: #0f2744;
+    color: white;
+
+    z-index: 9999;
+
+    overflow: hidden;
+  }
+
+  /* Logo */
+
+  .logo {
+    height: 102px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+    font-weight: bold;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* =========================
+     MENU
+     ========================= */
+
+  .menu {
+    padding-top: 25px;
+    padding-bottom: 90px;
+  }
+
+  .menu a {
+    display: block;
+
+    width: 100%;
+
+    padding: 18px 30px;
+
+    color: white;
+    text-decoration: none;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    transition: background 0.2s ease;
+  }
+
+  .menu a:hover {
+    background: #1d4268;
+  }
+
+  .menu a.active {
+    background: #2864df;
+  }
+
+  /* =========================
+     LOGOUT
+     ========================= */
+
+  .logout {
+    position: fixed;
+
+    left: 0;
+    bottom: 0;
+
+    width: 300px;
+
+    padding: 15px 24px 20px;
+
+    background: #0f2744;
+
+    z-index: 10000;
+  }
+
+  .logout button {
+    display: block;
+
+    width: 100%;
+    height: 48px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #e52424;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+  }
+
+  .logout button:hover {
+    background: #c91d1d;
+  }
+
+  /* =========================
+     MAIN CONTENT
+     ========================= */
+
+  .main-content {
+    margin-left: 300px;
+
+    min-height: 100vh;
+
+    background: #f5f7fb;
+  }
+
+  /* =========================
+     TOPBAR
+     ========================= */
+
+  .topbar {
+    height: 69px;
+
+    background: white;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding: 0 30px;
+  }
+
+  .user-name {
+    color: #374151;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* =========================
+     MOBILE
+     ========================= */
+
+  @media (max-width: 900px) {
+
+    .sidebar {
+      width: 240px;
+    }
+
+    .logout {
+      width: 240px;
+    }
+
+    .main-content {
+      margin-left: 240px;
+    }
+
+    .logo {
+      font-size: 23px;
+    }
+
+    .menu a {
+      padding: 15px 22px;
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 600px) {
+
+    .sidebar {
+      width: 210px;
+    }
+
+    .logout {
+      width: 210px;
+    }
+
+    .main-content {
+      margin-left: 210px;
+    }
+
+    .topbar {
+      padding: 0 15px;
+    }
+  }
+</style>
+
+
+<div class="admin-layout">
+
+  <!-- =========================
+       SIDEBAR
+       ========================= -->
+
+  <aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="logo">
+      Admin Panel
+    </div>
+
+
+    <!-- MENU -->
+    <nav class="menu">
+
+      <a
+        routerLink="/admin/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        Dashboard
+
+      </a>
+
+
+      <a
+        routerLink="/admin/students"
+        routerLinkActive="active">
+
+        Students
+
+      </a>
+
+
+      <a
+        routerLink="/admin/courses"
+        routerLinkActive="active">
+
+        Courses
+
+      </a>
+
+
+      <a
+        routerLink="/admin/attendance"
+        routerLinkActive="active">
+
+        Attendance
+
+      </a>
+
+
+      <a
+        routerLink="/admin/results"
+        routerLinkActive="active">
+
+        Results
+
+      </a>
+
+
+      <a
+        routerLink="/admin/notices"
+        routerLinkActive="active">
+
+        Notices
+
+      </a>
+
+    </nav>
+
+
+    <!-- LOGOUT -->
+    <div class="logout">
+
+      <button
+        type="button"
+        (click)="logout()">
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =========================
+       MAIN CONTENT
+       ========================= -->
+
+  <main class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+      <span class="user-name">
+
+        Welcome,
+        {{ getUserName() }}
+
+      </span>
+
+    </div>
+
+
+    <!-- PAGE CONTENT -->
+    <router-outlet></router-outlet>
+
+  </main>
+
+</div>

@@ -1,0 +1,461 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .courses-container {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: calc(100vh - 65px);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* HEADER */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .page-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 28px;
+  }
+
+  .total-courses {
+    background: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #374151;
+    font-size: 15px;
+  }
+
+  .total-courses strong {
+    color: #2563eb;
+    font-size: 18px;
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-card h3 {
+    margin: 0 0 20px;
+    color: #1f2937;
+    font-size: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* FORM BUTTONS */
+  .form-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .btn {
+    border: none;
+    padding: 11px 20px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .save-btn {
+    background: #2563eb;
+    color: white;
+  }
+
+  .save-btn:hover {
+    background: #1d4ed8;
+  }
+
+  .cancel-btn {
+    background: #6b7280;
+    color: white;
+  }
+
+  .cancel-btn:hover {
+    background: #4b5563;
+  }
+
+  /* TABLE CARD */
+  .table-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .table-title {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-title h3 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 20px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #1f3a5f;
+  }
+
+  thead th {
+    color: #ffffff;
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .id-cell {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  /* ACTION BUTTONS */
+  .actions {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    background: #f59e0b;
+  }
+
+  .edit-btn:hover {
+    background: #d97706;
+  }
+
+  .delete-btn {
+    background: #dc2626;
+  }
+
+  .delete-btn:hover {
+    background: #b91c1c;
+  }
+
+  .empty-row {
+    text-align: center;
+    padding: 35px !important;
+    color: #6b7280 !important;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+
+    .courses-container {
+      padding: 15px;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+
+<div class="courses-container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+
+    <h2>Course Management</h2>
+
+    <div class="total-courses">
+      Total Courses:
+      <strong>{{ courses.length }}</strong>
+    </div>
+
+  </div>
+
+
+  <!-- ADD / EDIT FORM -->
+  <div class="form-card">
+
+    <h3>
+      {{ editing ? 'Edit Course' : 'Add New Course' }}
+    </h3>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+
+        <label>Course Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="course.name"
+          placeholder="Enter course name">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Course Code</label>
+
+        <input
+          type="text"
+          [(ngModel)]="course.code"
+          placeholder="Enter course code">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Duration</label>
+
+        <input
+          type="text"
+          [(ngModel)]="course.duration"
+          placeholder="Enter duration">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Description</label>
+
+        <textarea
+          [(ngModel)]="course.description"
+          placeholder="Enter course description">
+        </textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-buttons">
+
+      <button
+        type="button"
+        class="btn save-btn"
+        (click)="saveCourse()">
+
+        {{ editing ? 'Update Course' : 'Add Course' }}
+
+      </button>
+
+
+      <button
+        type="button"
+        class="btn cancel-btn"
+        *ngIf="editing"
+        (click)="clearForm()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- COURSE TABLE -->
+  <div class="table-card">
+
+    <div class="table-title">
+      <h3>Course List</h3>
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Code</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr *ngFor="let item of courses">
+
+            <td class="id-cell">
+              {{ item.id }}
+            </td>
+
+            <td>
+              {{ item.name }}
+            </td>
+
+            <td>
+              {{ item.code }}
+            </td>
+
+            <td>
+              {{ item.duration }}
+            </td>
+
+            <td>
+              {{ item.description }}
+            </td>
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  type="button"
+                  class="edit-btn"
+                  (click)="editCourse(item)">
+
+                  Edit
+
+                </button>
+
+
+                <button
+                  type="button"
+                  class="delete-btn"
+                  (click)="deleteCourse(item.id)">
+
+                  Delete
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+          <tr *ngIf="courses.length === 0">
+
+            <td
+              colspan="6"
+              class="empty-row">
+
+              No courses found.
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
