@@ -56,7 +56,9 @@
       <!-- ERROR MESSAGE -->
       <div
         class="error-message"
-        *ngIf="message">
+        *ngIf="message"
+        role="alert"
+        aria-live="assertive">
 
         {{ message }}
 
@@ -66,26 +68,14 @@
       <!-- LOGIN BUTTON -->
       <button
         type="submit"
-        class="login-btn">
+        class="login-btn"
+        [disabled]="loading">
 
-        Login
+        {{ loading ? 'Checking...' : 'Login' }}
 
       </button>
 
     </form>
-
-
-    <!-- REGISTER -->
-    <div class="register-link">
-
-      Don't have an account?
-
-      <a routerLink="/register">
-        Create New Account
-      </a>
-
-    </div>
-
 
 
   </div>

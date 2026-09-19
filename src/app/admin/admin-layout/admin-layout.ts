@@ -45,6 +45,9 @@ export class AdminLayout {
   }
 
   logout(): void {
+    if (!confirm('Are you sure you want to logout?')) {
+      return;
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('isLoggedIn');

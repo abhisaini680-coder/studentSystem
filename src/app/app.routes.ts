@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 
-// ================= LOGIN / REGISTER =================
+// ================= LOGIN =================
 
 import { Login } from './login/login';
-import { Register } from './register/register';
 
 // ================= ADMIN =================
 
@@ -15,6 +14,7 @@ import { Courses as AdminCourses } from './admin/courses/courses';
 import { Attendance } from './admin/attendance/attendance';
 import { Results } from './admin/results/results';
 import { Notices } from './admin/notices/notices';
+import { Subjects as AdminSubjects } from './admin/subjects/subjects';
 
 // ================= USER =================
 
@@ -22,10 +22,11 @@ import { UserLayout } from './user/user-layout/user-layout';
 
 import { UserDashboard } from './user/dashboard/dashboard';
 import { Profile } from './user/profile/profile';
-import { Courses as UserCourses } from './user/courses/courses';
+import { Subjects as UserSubjects } from './user/subjects/subjects';
 import { UserAttendance } from './user/attendance/attendance';
 import { UserResults } from './user/results/results';
 import { UserNotices } from './user/notices/notices';
+import { adminGuard, userGuard } from './auth.guard';
 
 
 export const routes: Routes = [
@@ -41,16 +42,6 @@ export const routes: Routes = [
 
 
   // ==================================================
-  // REGISTER
-  // ==================================================
-
-  {
-    path: 'register',
-    component: Register
-  },
-
-
-  // ==================================================
   // ADMIN LAYOUT
   // Sidebar stays visible
   // ==================================================
@@ -58,6 +49,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayout,
+    canActivate: [adminGuard],
 
     children: [
 
@@ -80,6 +72,11 @@ export const routes: Routes = [
       {
         path: 'courses',
         component: AdminCourses
+      },
+
+      {
+        path: 'subjects',
+        component: AdminSubjects
       },
 
       {
@@ -109,6 +106,7 @@ export const routes: Routes = [
   {
     path: 'user',
     component: UserLayout,
+    canActivate: [userGuard],
 
     children: [
 
@@ -129,8 +127,8 @@ export const routes: Routes = [
       },
 
       {
-        path: 'courses',
-        component: UserCourses
+        path: 'subjects',
+        component: UserSubjects
       },
 
       {

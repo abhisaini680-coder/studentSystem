@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,7 +24,7 @@ interface Result {
 })
 export class Results implements OnInit {
 
-  private apiUrl = 'https://localhost:7200/api/Results';
+  private apiUrl = '/api/Results';
 
   results: Result[] = [];
 
@@ -40,7 +40,10 @@ export class Results implements OnInit {
 
   editing = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     // Automatically load results when page opens
@@ -51,10 +54,12 @@ export class Results implements OnInit {
     this.http.get<Result[]>(this.apiUrl).subscribe({
       next: (data) => {
         this.results = data;
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         console.error('Error loading results:', error);
         this.results = [];
+        this.changeDetector.markForCheck();
       }
     });
   }

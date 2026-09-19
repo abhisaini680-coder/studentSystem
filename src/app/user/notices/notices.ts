@@ -5,6 +5,7 @@ import {
 
 import {
   Component,
+  ChangeDetectorRef,
   OnInit
 } from '@angular/core';
 
@@ -35,12 +36,13 @@ interface Notice {
 export class UserNotices implements OnInit {
 
   private apiUrl =
-    'https://localhost:7200/api/Notices';
+    '/api/Notices';
 
   notices: Notice[] = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,7 @@ export class UserNotices implements OnInit {
         );
 
         this.notices = data;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -79,6 +82,7 @@ export class UserNotices implements OnInit {
         );
 
         this.notices = [];
+        this.changeDetector.markForCheck();
       }
 
     });

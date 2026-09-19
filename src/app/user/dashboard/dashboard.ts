@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
+  DestroyRef,
   OnInit,
   PLATFORM_ID,
   inject
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { interval, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -23,8 +28,10 @@ import { RouterLink } from '@angular/router';
 export class UserDashboard implements OnInit {
 
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
+  private changeDetector = inject(ChangeDetectorRef);
 
-  private apiUrl = 'https://localhost:7200/api';
+  private apiUrl = '/api';
 
   user: any = null;
 
@@ -39,15 +46,27 @@ export class UserDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadUser();
+      interval(30000)
+        .pipe(
+          startWith(0),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => this.loadDashboardData());
+    }
+  }
 
-    // Load logged-in student
-    this.loadUser();
-
-    // Automatically load dashboard data
+  private loadDashboardData(): void {
     this.loadCourses();
     this.loadAttendance();
     this.loadResults();
     this.loadNotices();
+  }
+
+  private getStudentParams(): HttpParams {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return new HttpParams().set('studentId', String(user.id || 0));
   }
 
 
@@ -108,6 +127,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalCourses = data.length;
+        this.changeDetector.markForCheck();
 
       },
 
@@ -119,6 +139,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalCourses = 0;
+        this.changeDetector.markForCheck();
 
       }
 
@@ -133,7 +154,8 @@ export class UserDashboard implements OnInit {
   loadAttendance(): void {
 
     this.http.get<any[]>(
-      `${this.apiUrl}/Attendance`
+      `${this.apiUrl}/Attendance`,
+      { params: this.getStudentParams() }
     ).subscribe({
 
       next: (data) => {
@@ -148,6 +170,7 @@ export class UserDashboard implements OnInit {
          * records currently in the database.
          */
         this.totalAttendance = data.length;
+        this.changeDetector.markForCheck();
 
       },
 
@@ -159,6 +182,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalAttendance = 0;
+        this.changeDetector.markForCheck();
 
       }
 
@@ -173,7 +197,8 @@ export class UserDashboard implements OnInit {
   loadResults(): void {
 
     this.http.get<any[]>(
-      `${this.apiUrl}/Results`
+      `${this.apiUrl}/Results`,
+      { params: this.getStudentParams() }
     ).subscribe({
 
       next: (data) => {
@@ -184,6 +209,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalResults = data.length;
+        this.changeDetector.markForCheck();
 
       },
 
@@ -195,6 +221,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalResults = 0;
+        this.changeDetector.markForCheck();
 
       }
 
@@ -220,6 +247,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalNotices = data.length;
+        this.changeDetector.markForCheck();
 
       },
 
@@ -231,6 +259,7 @@ export class UserDashboard implements OnInit {
         );
 
         this.totalNotices = 0;
+        this.changeDetector.markForCheck();
 
       }
 

@@ -5,12 +5,14 @@ import {
 
 import {
   Component,
+  ChangeDetectorRef,
   OnInit
 } from '@angular/core';
 
 import {
   HttpClient
 } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 
 interface AttendanceRecord {
   id: number;
@@ -35,12 +37,13 @@ interface AttendanceRecord {
 export class UserAttendance implements OnInit {
 
   private apiUrl =
-    'https://localhost:7200/api/Attendance';
+    '/api/Attendance';
 
   attendanceList: AttendanceRecord[] = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +54,8 @@ export class UserAttendance implements OnInit {
   }
 
   loadAttendance(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const params = new HttpParams().set('studentId', String(user.id || 0));
 
     console.log(
       'Loading attendance from:',
@@ -58,7 +63,8 @@ export class UserAttendance implements OnInit {
     );
 
     this.http.get<AttendanceRecord[]>(
-      this.apiUrl
+      this.apiUrl,
+      { params }
     ).subscribe({
 
       next: (data) => {
@@ -69,6 +75,7 @@ export class UserAttendance implements OnInit {
         );
 
         this.attendanceList = data;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -79,6 +86,7 @@ export class UserAttendance implements OnInit {
         );
 
         this.attendanceList = [];
+        this.changeDetector.markForCheck();
       }
 
     });

@@ -4,6 +4,7 @@ import {
 
 import {
   Component,
+  ChangeDetectorRef,
   OnInit
 } from '@angular/core';
 
@@ -33,12 +34,13 @@ interface Course {
 export class Courses implements OnInit {
 
   private apiUrl =
-    'https://localhost:7200/api/Courses';
+    '/api/Courses';
 
   courses: Course[] = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +69,7 @@ export class Courses implements OnInit {
         );
 
         this.courses = data;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -77,6 +80,7 @@ export class Courses implements OnInit {
         );
 
         this.courses = [];
+        this.changeDetector.markForCheck();
       }
 
     });

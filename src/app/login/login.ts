@@ -2,15 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    RouterLink
+    FormsModule
   ],
   templateUrl: './login.html'
 })
@@ -24,7 +23,7 @@ export class Login {
 
   // IMPORTANT
   // Use the same port where your .NET API is running
-  apiUrl = 'https://localhost:7200/api/User';
+  apiUrl = '/api/User';
 
   constructor(
     private http: HttpClient,
@@ -35,8 +34,20 @@ export class Login {
 
     this.message = '';
 
-    if (!this.email || !this.password) {
-      this.message = 'Please enter email and password.';
+    this.email = this.email.trim();
+
+    if (!this.email) {
+      this.message = 'Please enter your email.';
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+      this.message = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (!this.password) {
+      this.message = 'Please enter your password.';
       return;
     }
 
@@ -121,23 +132,16 @@ export class Login {
 
         this.loading = false;
 
-        if (error.status === 401) {
-
+        if (error.status === 401 || error.status === 400 || error.status === 404) {
+          this.message = 'Incorrect email or password. Please try again.';
+        } else if (error.status === 0) {
           this.message =
-            'Invalid email or password.';
-
-        }
-        else if (error.status === 0) {
-
+            'Cannot connect to the server. Please try again later.';
+        } else {
           this.message =
-            'Cannot connect to .NET API. Check that the API is running and the port is correct.';
-
-        }
-        else {
-
-          this.message =
-            error.error?.message ||
-            'Login failed. Please try again.';
+            typeof error.error === 'string'
+              ? error.error
+              : error.error?.message || 'Login failed. Please try again.';
         }
       }
     });

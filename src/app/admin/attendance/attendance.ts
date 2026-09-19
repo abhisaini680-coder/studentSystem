@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -23,7 +23,7 @@ interface AttendanceRecord {
 })
 export class Attendance implements OnInit {
 
-  private apiUrl = 'https://localhost:7200/api/Attendance';
+  private apiUrl = '/api/Attendance';
 
   attendanceList: AttendanceRecord[] = [];
 
@@ -37,7 +37,10 @@ export class Attendance implements OnInit {
 
   editing = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     // Automatically load attendance when page opens
@@ -48,10 +51,12 @@ export class Attendance implements OnInit {
     this.http.get<AttendanceRecord[]>(this.apiUrl).subscribe({
       next: (data) => {
         this.attendanceList = data;
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         console.error('Error loading attendance:', error);
         this.attendanceList = [];
+        this.changeDetector.markForCheck();
       }
     });
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,6 +9,7 @@ interface Student {
   email: string;
   phone: string;
   course: string;
+  password?: string;
 }
 
 @Component({
@@ -23,7 +24,7 @@ interface Student {
 })
 export class Students implements OnInit {
 
-  private apiUrl = 'http://localhost:5246/api/Students';
+  private apiUrl = '/api/Students';
 
   students: Student[] = [];
   
@@ -33,7 +34,8 @@ export class Students implements OnInit {
     name: '',
     email: '',
     phone: '',
-    course: ''
+    course: '',
+    password: ''
   };
 
   editing = false;
@@ -41,7 +43,10 @@ export class Students implements OnInit {
   message = '';
   errorMessage = '';
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
+  ) {
     console.log('Students constructor called');
   }
 
@@ -69,6 +74,7 @@ export class Students implements OnInit {
         console.log('================================');
 
         this.students = data;
+        this.changeDetector.markForCheck();
 
         console.log('students array after assignment:', this.students);
       },
@@ -85,6 +91,7 @@ export class Students implements OnInit {
 
         this.errorMessage =
           'Unable to load students. Check browser console.';
+        this.changeDetector.markForCheck();
       },
 
       complete: () => {
@@ -97,6 +104,18 @@ export class Students implements OnInit {
   saveStudent(): void {
 
     console.log('SAVE STUDENT CALLED');
+
+    if (!this.student.name.trim() || !this.student.email.trim() || !this.student.course.trim()) {
+      this.errorMessage = 'Name, email, and course are required.';
+      return;
+    }
+
+    if (!this.editing && !this.student.password?.trim()) {
+      this.errorMessage = 'A password is required for the student login.';
+      return;
+    }
+
+    this.errorMessage = '';
 
     if (this.editing) {
 
@@ -149,7 +168,8 @@ export class Students implements OnInit {
       name: item.name,
       email: item.email,
       phone: item.phone,
-      course: item.course
+      course: item.course,
+      password: ''
     };
 
     this.editing = true;
@@ -184,7 +204,8 @@ export class Students implements OnInit {
       name: '',
       email: '',
       phone: '',
-      course: ''
+      course: '',
+      password: ''
     };
 
     this.editing = false;

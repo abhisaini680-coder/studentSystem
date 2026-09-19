@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -22,7 +22,7 @@ interface Notice {
 })
 export class Notices implements OnInit {
 
-  private apiUrl = 'https://localhost:7200/api/Notices';
+  private apiUrl = '/api/Notices';
 
   notices: Notice[] = [];
 
@@ -36,7 +36,10 @@ export class Notices implements OnInit {
 
   editing = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     // Automatically load notices when page opens
@@ -47,10 +50,12 @@ export class Notices implements OnInit {
     this.http.get<Notice[]>(this.apiUrl).subscribe({
       next: (data) => {
         this.notices = data;
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         console.error('Error loading notices:', error);
         this.notices = [];
+        this.changeDetector.markForCheck();
       }
     });
   }

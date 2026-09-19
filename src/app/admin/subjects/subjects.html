@@ -1,0 +1,37 @@
+<div class="subjects-page">
+  <h2>Subjects</h2>
+  <form class="subject-form" (ngSubmit)="saveSubject()">
+    <label>Subject Name <input name="name" [(ngModel)]="subject.name" required></label>
+    <label>Subject Code <input name="code" [(ngModel)]="subject.code" required></label>
+    <label>Course
+      <select name="course" [(ngModel)]="subject.course" required>
+        <option value="" disabled>Select a course</option>
+        <option *ngFor="let course of courses" [value]="course.name">{{ course.name }}</option>
+      </select>
+    </label>
+    <div class="actions">
+      <button type="submit">{{ editing ? 'Update' : 'Add' }} Subject</button>
+      <button type="button" class="cancel" *ngIf="editing" (click)="clearForm()">Cancel</button>
+    </div>
+  </form>
+  <section class="subject-list">
+    <h3>All Subjects ({{ subjects.length }})</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ID</th><th>Name</th><th>Code</th><th>Course</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let item of subjects">
+            <td>{{ item.id }}</td><td>{{ item.name }}</td><td>{{ item.code }}</td><td>{{ item.course }}</td>
+            <td class="row-actions"><button type="button" (click)="editSubject(item)">Edit</button><button type="button" class="delete" (click)="deleteSubject(item.id)">Delete</button></td>
+          </tr>
+          <tr *ngIf="subjects.length === 0"><td colspan="5" class="empty">No subjects found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<style>
+  .subjects-page { padding: 30px; min-height: calc(100vh - 65px); background: #f5f7fb; font-family: Arial, Helvetica, sans-serif; }
+  h2 { margin: 0 0 20px; color: #1f2937; } .subject-form, .subject-list { background: #fff; padding: 24px; margin-bottom: 24px; border-radius: 10px; box-shadow: 0 3px 12px rgba(0,0,0,.08); }
+  .subject-form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: end; } label { display: grid; gap: 7px; font-weight: 600; color: #374151; font-size: 14px; } input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; } .actions { display: flex; gap: 8px; } button { border: 0; border-radius: 6px; padding: 10px 14px; background: #2563eb; color: #fff; cursor: pointer; } .cancel, .delete { background: #6b7280; } .delete { background: #dc2626; } .table-wrapper { overflow-x: auto; } table { width: 100%; border-collapse: collapse; } th { background: #1f3a5f; color: #fff; text-align: left; } th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; } .row-actions { display: flex; gap: 8px; white-space: nowrap; } .empty { text-align: center; color: #6b7280; } @media (max-width: 700px) { .subjects-page { padding: 15px; } .subject-form { grid-template-columns: 1fr; } }
+</style>

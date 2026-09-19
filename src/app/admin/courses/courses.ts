@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -22,7 +22,7 @@ interface Course {
 })
 export class Courses implements OnInit {
 
-  private apiUrl = 'https://localhost:7200/api/Courses';
+  private apiUrl = '/api/Courses';
 
   courses: Course[] = [];
 
@@ -36,7 +36,10 @@ export class Courses implements OnInit {
 
   editing = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     // Automatically load courses when page opens
@@ -47,10 +50,12 @@ export class Courses implements OnInit {
     this.http.get<Course[]>(this.apiUrl).subscribe({
       next: (data) => {
         this.courses = data;
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         console.error('Error loading courses:', error);
         this.courses = [];
+        this.changeDetector.markForCheck();
       }
     });
   }

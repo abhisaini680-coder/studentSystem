@@ -4,12 +4,14 @@ import {
 
 import {
   Component,
+  ChangeDetectorRef,
   OnInit
 } from '@angular/core';
 
 import {
   HttpClient
 } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 
 interface ResultRecord {
   id: number;
@@ -35,12 +37,13 @@ interface ResultRecord {
 export class UserResults implements OnInit {
 
   private apiUrl =
-    'https://localhost:7200/api/Results';
+    '/api/Results';
 
   results: ResultRecord[] = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +54,8 @@ export class UserResults implements OnInit {
   }
 
   loadResults(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const params = new HttpParams().set('studentId', String(user.id || 0));
 
     console.log(
       'Loading results from:',
@@ -58,7 +63,8 @@ export class UserResults implements OnInit {
     );
 
     this.http.get<ResultRecord[]>(
-      this.apiUrl
+      this.apiUrl,
+      { params }
     ).subscribe({
 
       next: (data) => {
@@ -69,6 +75,7 @@ export class UserResults implements OnInit {
         );
 
         this.results = data;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -79,6 +86,7 @@ export class UserResults implements OnInit {
         );
 
         this.results = [];
+        this.changeDetector.markForCheck();
       }
 
     });

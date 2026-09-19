@@ -4,6 +4,7 @@ import {
 } from '@angular/common';
 
 import {
+  ChangeDetectorRef,
   Component,
   OnInit,
   PLATFORM_ID,
@@ -45,7 +46,7 @@ export class Profile implements OnInit {
     inject(PLATFORM_ID);
 
   private apiUrl =
-    'https://localhost:7200/api/User';
+    '/api/User';
 
   user: UserProfile = {
     id: 0,
@@ -62,7 +63,8 @@ export class Profile implements OnInit {
   errorMessage = '';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +91,7 @@ export class Profile implements OnInit {
 
       this.errorMessage =
         'User information not found.';
+      this.changeDetector.markForCheck();
 
       return;
     }
@@ -105,11 +108,13 @@ export class Profile implements OnInit {
         course: loggedUser.course || '',
         phone: loggedUser.phone || ''
       };
+      this.changeDetector.markForCheck();
 
     } catch {
 
       this.errorMessage =
         'Unable to load profile.';
+      this.changeDetector.markForCheck();
     }
   }
 
@@ -232,6 +237,7 @@ export class Profile implements OnInit {
           course: response.user.course,
           phone: response.user.phone
         };
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -253,6 +259,8 @@ export class Profile implements OnInit {
           this.errorMessage =
             'Unable to update profile.';
         }
+
+        this.changeDetector.markForCheck();
       }
     });
   }

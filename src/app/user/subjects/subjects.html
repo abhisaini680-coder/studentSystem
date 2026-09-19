@@ -1,0 +1,18 @@
+<div class="subjects-page">
+  <h2>Subjects</h2>
+  <section class="subject-list">
+    <h3>Available Subjects</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ID</th><th>Subject Name</th><th>Code</th><th>Course</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let item of subjects"><td>{{ item.id }}</td><td>{{ item.name }}</td><td>{{ item.code }}</td><td>{{ item.course }}</td></tr>
+          <tr *ngIf="subjects.length === 0"><td colspan="4" class="empty">No subjects found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<style>
+  .subjects-page { padding: 30px; min-height: calc(100vh - 65px); background: #f5f7fb; font-family: Arial, Helvetica, sans-serif; } h2 { margin: 0 0 20px; color: #1f2937; } .subject-list { background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 3px 12px rgba(0,0,0,.08); } h3 { margin-top: 0; color: #374151; } .table-wrapper { overflow-x: auto; } table { width: 100%; border-collapse: collapse; } th { background: #1f3a5f; color: #fff; text-align: left; } th, td { padding: 13px; border-bottom: 1px solid #e5e7eb; } .empty { text-align: center; color: #6b7280; } @media (max-width: 700px) { .subjects-page { padding: 15px; } }
+</style>

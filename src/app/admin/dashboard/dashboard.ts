@@ -1,7 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  PLATFORM_ID
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { interval, startWith } from 'rxjs';
 
 interface Student {
   id: number;
@@ -35,6 +44,8 @@ export class Dashboard implements OnInit {
 
   private apiUrl = '/api';
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
+  private changeDetector = inject(ChangeDetectorRef);
 
   user: any = null;
 
@@ -48,18 +59,26 @@ export class Dashboard implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-  //  this.loadUser();
     if (isPlatformBrowser(this.platformId)) {
-      this.loadStudents();
+      this.loadUser();
+      interval(30000)
+        .pipe(
+          startWith(0),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => this.loadDashboardData());
     }
-  ///  this.loadCourses();
-  ///  this.loadAttendance();
- //   this.loadResults();
+  }
+
+  private loadDashboardData(): void {
+    this.loadStudents();
+    this.loadCourses();
+    this.loadAttendance();
+    this.loadResults();
   }
 
   // LOAD LOGGED-IN USER
   loadUser(): void {
-debugger;
     if (typeof window === 'undefined') {
       return;
     }
@@ -87,7 +106,6 @@ debugger;
         const rawStudents = Array.isArray(data)
           ? data
           : data.data ?? data.$values ?? [];
-debugger
         const students: Student[] = rawStudents.map((student) => ({
           id: student.id ?? student.Id ?? 0,
           name: student.name ?? student.Name ?? '',
@@ -99,15 +117,16 @@ debugger
         this.totalStudents = students.length;
 
         this.recentStudents = students;
+        this.changeDetector.markForCheck();
          
       },
 
       error: (error) => {
-debugger
         console.error('Students API error:', error);
 
         this.totalStudents = 0;
         this.recentStudents = [];
+        this.changeDetector.markForCheck();
       }
 
     });
@@ -123,6 +142,7 @@ debugger
       next: (data) => {
 
         this.totalCourses = data.length;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -130,6 +150,7 @@ debugger
         console.error('Courses API error:', error);
 
         this.totalCourses = 0;
+        this.changeDetector.markForCheck();
       }
 
     });
@@ -145,6 +166,7 @@ debugger
       next: (data) => {
 
         this.totalAttendance = data.length;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -152,6 +174,7 @@ debugger
         console.error('Attendance API error:', error);
 
         this.totalAttendance = 0;
+        this.changeDetector.markForCheck();
       }
 
     });
@@ -167,6 +190,7 @@ debugger
       next: (data) => {
 
         this.totalResults = data.length;
+        this.changeDetector.markForCheck();
       },
 
       error: (error) => {
@@ -174,6 +198,7 @@ debugger
         console.error('Results API error:', error);
 
         this.totalResults = 0;
+        this.changeDetector.markForCheck();
       }
 
     });
