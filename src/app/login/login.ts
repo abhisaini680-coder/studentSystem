@@ -4,6 +4,26 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+interface StudentLoginRecord {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  course: string;
+  password?: string;
+}
+
+interface LoginResponse {
+  user?: {
+    id?: number;
+    name?: string;
+    email?: string;
+    role?: string;
+    phone?: string;
+    course?: string;
+  };
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -23,7 +43,8 @@ export class Login {
 
   // IMPORTANT
   // Use the same port where your .NET API is running
-  apiUrl = '/api/User';
+  private readonly studentsApiUrl = '/api/Students';
+  private readonly userApiUrl = '/api/User';
 
   constructor(
     private http: HttpClient,
@@ -53,97 +74,71 @@ export class Login {
 
     this.loading = true;
 
-    const loginData = {
+    this.http.get<StudentLoginRecord[]>(this.studentsApiUrl).subscribe({
+      next: (students) => {
+        const student = students.find(
+          item => item.email.toLowerCase() === this.email.toLowerCase()
+        );
+
+        if (student) {
+          if (student.password !== this.password) {
+            this.finishLogin('Incorrect email or password. Please try again.');
+            return;
+          }
+
+          this.saveSession({
+            id: student.id,
+            name: student.name,
+            email: student.email,
+            phone: student.phone,
+            course: student.course,
+            role: 'user'
+          });
+          this.router.navigate(['/user/dashboard']);
+          return;
+        }
+
+        this.loginAdmin();
+      },
+      error: () => this.loginAdmin()
+    });
+  }
+
+  private loginAdmin(): void {
+    this.http.post<LoginResponse>(`${this.userApiUrl}/Login`, {
       email: this.email,
       password: this.password
-    };
-
-    console.log('Sending login request:', loginData);
-    console.log('API:', `${this.apiUrl}/Login`);
-
-    this.http.post<any>(
-      `${this.apiUrl}/Login`,
-      loginData
-    ).subscribe({
-
+    }).subscribe({
       next: (response) => {
-
-        console.log('Login response:', response);
-
-        this.loading = false;
-
-        if (!response || !response.user) {
-          this.message = 'Invalid response from server.';
-          return;
-        }
-
         const user = response.user;
 
-        // Save login information
-        localStorage.setItem(
-          'isLoggedIn',
-          'true'
-        );
-
-        localStorage.setItem(
-          'role',
-          user.role
-        );
-
-        localStorage.setItem(
-          'user',
-          JSON.stringify(user)
-        );
-
-        // =========================
-        // ADMIN
-        // =========================
-
-        if (
-          user.role?.toLowerCase() === 'admin'
-        ) {
-
-          this.router.navigate(['/admin/dashboard']);
-
+        if (user?.role?.toLowerCase() !== 'admin') {
+          this.finishLogin('Only students added by an administrator can log in.');
           return;
         }
 
-        // =========================
-        // USER
-        // =========================
-
-        if (
-          user.role?.toLowerCase() === 'user' ||
-          user.role?.toLowerCase() === 'customer'
-        ) {
-
-          this.router.navigate(['/user/dashboard']);
-
-          return;
-        }
-
-        this.message =
-          'Unknown user role: ' + user.role;
+        this.saveSession(user);
+        this.router.navigate(['/admin/dashboard']);
       },
-
       error: (error) => {
-
-        console.error('LOGIN ERROR:', error);
-
-        this.loading = false;
-
-        if (error.status === 401 || error.status === 400 || error.status === 404) {
-          this.message = 'Incorrect email or password. Please try again.';
-        } else if (error.status === 0) {
-          this.message =
-            'Cannot connect to the server. Please try again later.';
-        } else {
-          this.message =
-            typeof error.error === 'string'
-              ? error.error
-              : error.error?.message || 'Login failed. Please try again.';
-        }
+        this.finishLogin(
+          error.status === 0
+            ? 'Cannot connect to the server. Please try again later.'
+            : 'Incorrect email or password. Please try again.'
+        );
       }
     });
+  }
+
+  private saveSession(user: object): void {
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('role', (user as { role?: string }).role || 'user');
+    localStorage.setItem('user', JSON.stringify(user));
+    this.loading = false;
+  }
+
+  private finishLogin(message: string): void {
+    this.loading = false;
+    this.message = message;
   }
 }

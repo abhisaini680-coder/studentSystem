@@ -169,7 +169,7 @@ export class Students implements OnInit {
       email: item.email,
       phone: item.phone,
       course: item.course,
-      password: ''
+      password: item.password || ''
     };
 
     this.editing = true;
